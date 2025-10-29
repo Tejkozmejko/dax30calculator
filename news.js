@@ -1,65 +1,42 @@
-﻿// Мини helper за динамичко вметнување на TradingView економски календар
+﻿// wwwroot/js/news.js
 window.tvCalendar = {
-    load: function (cfg) {
+    load: (opts) => {
         const host = document.getElementById("tv-cal");
         if (!host) return;
 
-        // исчисти претходна содржина
-        host.innerHTML = `
-      <div class="tradingview-widget-container__widget"></div>
-      <div class="tradingview-widget-copyright">
-        <a href="https://www.tradingview.com/markets/economy/" target="_blank" rel="noopener">
-          Economic calendar by TradingView
-        </a>
-      </div>`;
+        // исчисти стар widget (ако се менува таб)
+        host.innerHTML = "";
 
-        // отстрани претходна скрипта ако постоела
-        const old = document.getElementById("tv-cal-script");
-        if (old) old.remove();
+        // контејнер како во embed примерот
+        const container = document.createElement("div");
+        container.className = "tradingview-widget-container";
 
-        // креирај нова скрипта со embed-widget + JSON конфигурација
+        const widgetDiv = document.createElement("div");
+        widgetDiv.className = "tradingview-widget-container__widget";
+        container.appendChild(widgetDiv);
+
+        // TradingView бара script со src И JSON текст во истиот таг
         const s = document.createElement("script");
-        s.id = "tv-cal-script";
         s.type = "text/javascript";
-        s.src = "https://s3.tradingview.com/external-embedding/embed-widget-events.js";
+        s.src =
+            "https://s3.tradingview.com/external-embedding/embed-widget-events.js";
+        s.async = true;
 
-        // автоматска временска зона од прелистувачот
-        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "Etc/UTC";
-
-        const payload = {
-            width: cfg?.width || "100%",
-            height: cfg?.height || 690,
-            colorTheme: cfg?.colorTheme || "dark",
-            isTransparent: cfg?.isTransparent ?? false,
-            locale: cfg?.locale || "en",
-            importanceFilter: cfg?.importanceFilter || "-1,0,1",
-            currencyFilter: cfg?.currencyFilter || "EUR,USD,GBP,JPY,CHF,AUD,CAD,NZD",
-            dateRange: cfg?.dateRange || "today",          // "today" | "tomorrow" | "this-week"
-            timezone: tz                                    // авто time zone
-        };
-
-        // TradingView очекува JSON како текст во истата <script> таг
-        s.text = JSON.stringify(payload);
-
-        host.appendChild(s);
-    }
-};
-window.tvCalendar = {
-    load: (options) => {
-        const container = document.getElementById("tv-cal");
-        container.innerHTML = "";
-
-        new TradingView.Calendar({
-            container_id: "tv-cal",
-            width: options.width,
-            height: options.height,
-            theme: options.theme,
-            locale: options.locale,
-            dateRange: options.dateRange,
+        // JSON конфигурација (како текст!)
+        s.innerHTML = JSON.stringify({
+            width: "100%",
+            height: opts?.height ?? 700,
+            locale: opts?.locale ?? "en",
+            colorTheme: (opts?.theme ?? "dark") === "dark" ? "dark" : "light",
             isTransparent: false,
-            currencyFilter: options.currencyFilter,
-            importTimezone: "browser"
+            currencyFilter:
+                opts?.currencyFilter ?? "USD,EUR,GBP,JPY,CHF,AUD,CAD,NZD",
+            importanceFilter: "-1,0,1",
+            dateRange: opts?.dateRange ?? "today", // today | tomorrow | thisWeek
+            // зоната автоматски ќе биде browser local
         });
-    }
-};
 
+        container.appendChild(s);
+        host.appendChild(container);
+    },
+};
