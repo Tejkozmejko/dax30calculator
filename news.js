@@ -44,3 +44,22 @@ window.tvCalendar = {
         host.appendChild(s);
     }
 };
+window.tvCalendar = {
+    load: (options) => {
+        const container = document.getElementById("tv-cal");
+        container.innerHTML = "";
+
+        new TradingView.Calendar({
+            container_id: "tv-cal",
+            width: options.width,
+            height: options.height,
+            theme: options.theme,
+            locale: options.locale,
+            dateRange: options.dateRange,
+            isTransparent: false,
+            currencyFilter: options.currencyFilter,
+            importTimezone: "browser"
+        });
+    }
+};
+
