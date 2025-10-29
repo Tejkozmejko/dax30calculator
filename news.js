@@ -1,13 +1,14 @@
-﻿// wwwroot/js/news.js
-window.tvCalendar = {
-    load: (opts) => {
+﻿console.log("news.js loaded");
+
+// no-op за да не крашира Blazor ако се повика пред да се вчита скриптата
+window.tvCalendar = window.tvCalendar || { load: () => console.warn("tvCalendar placeholder") };
+
+window.tvCalendar.load = (opts) => {
+    try {
         const host = document.getElementById("tv-cal");
         if (!host) return;
-
-        // исчисти стар widget (ако се менува таб)
         host.innerHTML = "";
 
-        // контејнер како во embed примерот
         const container = document.createElement("div");
         container.className = "tradingview-widget-container";
 
@@ -15,28 +16,35 @@ window.tvCalendar = {
         widgetDiv.className = "tradingview-widget-container__widget";
         container.appendChild(widgetDiv);
 
-        // TradingView бара script со src И JSON текст во истиот таг
         const s = document.createElement("script");
         s.type = "text/javascript";
-        s.src =
-            "https://s3.tradingview.com/external-embedding/embed-widget-events.js";
+        s.src = "https://s3.tradingview.com/external-embedding/embed-widget-events.js";
         s.async = true;
 
-        // JSON конфигурација (како текст!)
         s.innerHTML = JSON.stringify({
             width: "100%",
             height: opts?.height ?? 700,
             locale: opts?.locale ?? "en",
             colorTheme: (opts?.theme ?? "dark") === "dark" ? "dark" : "light",
             isTransparent: false,
-            currencyFilter:
-                opts?.currencyFilter ?? "USD,EUR,GBP,JPY,CHF,AUD,CAD,NZD",
+            currencyFilter: opts?.currencyFilter ?? "USD,EUR,GBP,JPY,CHF,AUD,CAD,NZD",
             importanceFilter: "-1,0,1",
-            dateRange: opts?.dateRange ?? "today", // today | tomorrow | thisWeek
-            // зоната автоматски ќе биде browser local
+            dateRange: opts?.dateRange ?? "today" // today | tomorrow | thisWeek
         });
 
         container.appendChild(s);
         host.appendChild(container);
-    },
+    } catch (e) {
+        console.error("tvCalendar.load error", e);
+    }
+};
+var cfg = {
+    width: "100%",
+    height: (opts.height != null ? opts.height : 700),
+    locale: (opts.locale || "en"),
+    colorTheme: theme,
+    isTransparent: false,
+    currencyFilter: (opts.currencyFilter || "USD,EUR,GBP,JPY,CHF,AUD,CAD,NZD"),
+    importanceFilter: (opts.importanceFilter || "-1,0,1"), // ⬅️ ДОДАДЕНО
+    dateRange: (opts.dateRange || "today")
 };

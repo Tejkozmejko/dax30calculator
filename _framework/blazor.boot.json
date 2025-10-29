@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "DAX30LotSizeCalculator",
   "resources": {
-    "hash": "sha256-IMLhM/d0mfF+bWpGrXZ5yejS4kI57o+JUsVDB1XywVE=",
+    "hash": "sha256-w3NQCVqk95nxdpNRwW7WkHfbRJQIgMQlFOxm9NorIjI=",
     "jsModuleNative": {
       "dotnet.native.js": "sha256-9Fzd5We95Rp03dEKIAbYjPDR3eWyLbmjMlYStvxyiok="
     },
@@ -209,7 +209,7 @@
       "mscorlib.wasm": "sha256-MZJ1V6miMP318lQowft4FPkcszcibPLDTwKj235fSAc=",
       "netstandard.wasm": "sha256-RYAURbR1AHkUZYjKgu+B/i3N3VP4abnAaH+vxwJ8d3c=",
       "System.Private.CoreLib.wasm": "sha256-4YzdATaWUDkUkRpe+hl+T61TaCjRVapVUtqTIai3Gd8=",
-      "DAX30LotSizeCalculator.wasm": "sha256-qbkEOMtXtwMa7RnbY4HLQt6Bg/sv5q+eTXioo2Hy7Ms="
+      "DAX30LotSizeCalculator.wasm": "sha256-ISwi4eZvOjjhrcEGZVJQxcB5wEqwn2OCfDqd7/xB4mE="
     }
   },
   "cacheBootResources": true,
