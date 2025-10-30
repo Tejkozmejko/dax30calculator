@@ -1,4 +1,4 @@
-html, body {
+﻿html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
@@ -101,3 +101,29 @@ a, .btn-link {
 code {
     color: #c02d76;
 }
+/* темен картичка-рам околу TradingView iframe-от */
+.cal-shell {
+    background: #0f1220; /* темна подлога */
+    border: 1px solid #20243b; /* тенка рамка */
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 6px 24px rgba(0,0,0,.35);
+}
+
+/* пример за темни табови/копчиња над календарот (ако користиш Bootstrap) */
+.nav-tabs .nav-link {
+    color: #9aa3b2;
+    border: 0;
+}
+
+    .nav-tabs .nav-link.active {
+        color: #fff;
+        background: #20243b;
+        border-radius: 8px;
+    }
+
+body {
+    background: #0b0e19; /* опционално темна позадина за цела страница */
+    color: #e7eaf3;
+}
+

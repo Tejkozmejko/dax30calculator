@@ -1,50 +1,46 @@
-﻿console.log("news.js loaded");
+﻿(function () {
+  console.log("news.js loaded");
+  if (!window.tvCalendar) window.tvCalendar = {};
 
-// no-op за да не крашира Blazor ако се повика пред да се вчита скриптата
-window.tvCalendar = window.tvCalendar || { load: () => console.warn("tvCalendar placeholder") };
-
-window.tvCalendar.load = (opts) => {
+  window.tvCalendar.load = function (opts) {
     try {
-        const host = document.getElementById("tv-cal");
-        if (!host) return;
-        host.innerHTML = "";
+      opts = opts || {};
+      var host = document.getElementById("tv-cal");
+      if (!host) return;
+      host.innerHTML = "";
 
-        const container = document.createElement("div");
-        container.className = "tradingview-widget-container";
+      var shell = document.createElement("div");
+      shell.className = "cal-shell";              // темен „рам“ околу widget-от
 
-        const widgetDiv = document.createElement("div");
-        widgetDiv.className = "tradingview-widget-container__widget";
-        container.appendChild(widgetDiv);
+      var container = document.createElement("div");
+      container.className = "tradingview-widget-container";
 
-        const s = document.createElement("script");
-        s.type = "text/javascript";
-        s.src = "https://s3.tradingview.com/external-embedding/embed-widget-events.js";
-        s.async = true;
+      var inner = document.createElement("div");
+      inner.className = "tradingview-widget-container__widget";
+      container.appendChild(inner);
 
-        s.innerHTML = JSON.stringify({
-            width: "100%",
-            height: opts?.height ?? 700,
-            locale: opts?.locale ?? "en",
-            colorTheme: (opts?.theme ?? "dark") === "dark" ? "dark" : "light",
-            isTransparent: false,
-            currencyFilter: opts?.currencyFilter ?? "USD,EUR,GBP,JPY,CHF,AUD,CAD,NZD",
-            importanceFilter: "-1,0,1",
-            dateRange: opts?.dateRange ?? "today" // today | tomorrow | thisWeek
-        });
+      var s = document.createElement("script");
+      s.type = "text/javascript";
+      s.src = "https://s3.tradingview.com/external-embedding/embed-widget-events.js";
+      s.async = true;
 
-        container.appendChild(s);
-        host.appendChild(container);
+      var cfg = {
+        width: "100%",
+        height: (opts.height != null ? opts.height : 700),
+        locale: (opts.locale || "en"),
+        colorTheme: "dark",           // темно
+        isTransparent: true,          // iframe ќе биде проѕирен → ќе се гледа нашата темна подлога
+        currencyFilter: (opts.currencyFilter || "USD,EUR,GBP,JPY,CHF,AUD,CAD,NZD"),
+        importanceFilter: (opts.importanceFilter || "-1,0,1"),
+        dateRange: (opts.dateRange || "today")
+      };
+      s.innerHTML = JSON.stringify(cfg);
+
+      container.appendChild(s);
+      shell.appendChild(container);
+      host.appendChild(shell);
     } catch (e) {
-        console.error("tvCalendar.load error", e);
+      console.error("tvCalendar.load error", e);
     }
-};
-var cfg = {
-    width: "100%",
-    height: (opts.height != null ? opts.height : 700),
-    locale: (opts.locale || "en"),
-    colorTheme: theme,
-    isTransparent: false,
-    currencyFilter: (opts.currencyFilter || "USD,EUR,GBP,JPY,CHF,AUD,CAD,NZD"),
-    importanceFilter: (opts.importanceFilter || "-1,0,1"), // ⬅️ ДОДАДЕНО
-    dateRange: (opts.dateRange || "today")
-};
+  };
+})();
